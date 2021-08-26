@@ -1,3 +1,32 @@
 lane :test do
-  npm
+  npm_install(
+    fresh: true,                            # [Optional] Boolean: Defines if modules should be fresh instaled. Deletes node_modules folder (Default: false)
+    arguments: [],                          # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
+
+  npm_post_install(
+    arguments: [],                          # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
+
+  npm_lint(
+    script: 'lint',                         # [Optional] String: Overrides default lint script name (Default: lint)
+    fix: true,                              # [Optional] Boolean: Adds a --fix flag (Default: false)
+    arguments: [],                          # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
+
+  npm_test(
+    script: 'test',                         # [Optional] String: Overrides default test script name (Default: test)
+    coverage: true,                         # [Optional] Boolean: Adds a --coverage flag (Default: false)
+    arguments: [],                          # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
+
+  npm_run(
+    script: 'start',                        # [Required] String: Script to run
+    arguments: ['--reset-cache'],           # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
 end

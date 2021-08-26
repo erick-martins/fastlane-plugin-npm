@@ -5,15 +5,19 @@ module Fastlane
   module Actions
     class NpmLintAction < Action
       def self.run(params)
+        arguments = []
+        arguments = ['--fix'] if params[:fix]
+        arguments.concat params[:fix]
+
         other_action.npm_run(
           script: 'lint', 
           step_name: params[:step_name],
-          arguments: params[:arguments]
+          arguments: arguments
         )
       end
 
       def self.description
-        "A very simple plugin to run npm scripts"
+        "Runs lint script"
       end
 
       def self.authors
@@ -36,6 +40,12 @@ module Fastlane
                                description: "Lint script",
                                   optional: true,
                                       type: String),
+
+          FastlaneCore::ConfigItem.new(key: :fix,
+                             default_value: false,
+                               description: "Run postinstall script right after",
+                                  optional: true,
+                                      type: Boolean),
 
           FastlaneCore::ConfigItem.new(key: :arguments,
                               default_value: [],

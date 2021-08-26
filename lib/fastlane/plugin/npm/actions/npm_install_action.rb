@@ -6,17 +6,17 @@ module Fastlane
     class NpmInstallAction < Action
       def self.run(params)
         # rm may exit with non zero in the case where there is no node_modules and that's what we want anyway
-        FastlaneCore::CommandExecutor.execute(command: 'rm -rf ../node_modules 2> /dev/null',
-                                        print_command: FastlaneCore::Globals.verbose?,
-                                            print_all: FastlaneCore::Globals.verbose?)
+        if params[:fresh]
+          FastlaneCore::CommandExecutor.execute(command: 'rm -rf ../node_modules 2> /dev/null',
+                                          print_command: FastlaneCore::Globals.verbose?,
+                                              print_all: FastlaneCore::Globals.verbose?)
+        end
                                             
         other_action.npm_run(
           script: 'install', 
           step_name: params[:step_name],
           arguments: params[:arguments]
         )
-
-        other_action.npm_post_install if params[:post_install_after]
       end
 
       def self.description
@@ -44,7 +44,7 @@ module Fastlane
                                   optional: true,
                                       type: String),
 
-          FastlaneCore::ConfigItem.new(key: :clean,
+          FastlaneCore::ConfigItem.new(key: :fresh,
                              default_value: false,
                                description: "Deletes node_modules folder",
                                   optional: true,
@@ -55,12 +55,6 @@ module Fastlane
                                 description: "Script arguments",
                                   optional: true,
                                       type: Array),
-
-          FastlaneCore::ConfigItem.new(key: :post_install_after,
-                             default_value: false,
-                               description: "Run postinstall script right after",
-                                  optional: true,
-                                      type: Boolean),
         ]
       end
 

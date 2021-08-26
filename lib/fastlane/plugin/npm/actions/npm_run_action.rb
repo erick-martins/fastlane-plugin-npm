@@ -6,7 +6,7 @@ module Fastlane
     class NpmRunAction < Action
       def self.run(params)
         command = ['npm', 'run', params[:script]]
-        command = ['npm', params[:script]] if ['install', 'test'].include? params[:script]
+        command = ['npm', params[:script]] if ['install', 'test', 'start'].include? params[:script]
 
         command.concat params[:arguments]
 
