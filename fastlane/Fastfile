@@ -29,4 +29,9 @@ lane :test do
     arguments: ['--reset-cache'],           # [Optional] Array: List of arguments
     step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
   )
+
+  upgrade_package_json_version(
+    new_version: "1.5.0",                  # [Required] String: Version to set
+    version_match: "(\d+\.\d+\.\d+)"       # [Optional] String: Regex as a string to match the version in the package.json (Default: "(\d+\.\d+\.\d+)")
+  )
 end

@@ -22,22 +22,57 @@ A very simple plugin to run npm scripts
 
 
 
-## Example
+## Actions
 
-Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`.
+```ruby
+lane :test do
+  npm_install(
+    fresh: true,                            # [Optional] Boolean: Defines if modules should be fresh instaled. Deletes node_modules folder (Default: false)
+    arguments: [],                          # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
 
+  npm_post_install(
+    arguments: [],                          # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
 
+  npm_lint(
+    script: 'lint',                         # [Optional] String: Overrides default lint script name (Default: lint)
+    fix: true,                              # [Optional] Boolean: Adds a --fix flag (Default: false)
+    arguments: [],                          # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
 
+  npm_test(
+    script: 'test',                         # [Optional] String: Overrides default test script name (Default: test)
+    coverage: true,                         # [Optional] Boolean: Adds a --coverage flag (Default: false)
+    arguments: [],                          # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
+
+  npm_run(
+    script: 'start',                        # [Required] String: Script to run
+    arguments: ['--reset-cache'],           # [Optional] Array: List of arguments
+    step_name: 'Starting with reset cache'  # [Optional] String: Text that will be printed into the console
+  )
+
+  upgrade_package_json_version(
+    new_version: "1.5.0",                  # [Required] String: Version to set
+    version_match: "(\d+\.\d+\.\d+)"       # [Optional] String: Regex as a string to match the version in the package.json (Default: "(\d+\.\d+\.\d+)")
+  )
+end
+```
 ## Run tests for this plugin
 
 To run both the tests, and code style validation, run
 
-```
+```bash
 rake
 ```
 
 To automatically fix many of the styling issues, use
-```
+```bash
 rubocop -a
 ```
 
