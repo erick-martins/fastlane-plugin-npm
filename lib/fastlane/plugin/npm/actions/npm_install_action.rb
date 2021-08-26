@@ -7,7 +7,7 @@ module Fastlane
       def self.run(params)
         # rm may exit with non zero in the case where there is no node_modules and that's what we want anyway
         if params[:fresh]
-          UI.importante('Deleting node modules and installing packages')
+          UI.important('Deleting node modules and installing packages')
           FastlaneCore::CommandExecutor.execute(command: 'rm -rf ../node_modules 2> /dev/null',
                                           print_command: FastlaneCore::Globals.verbose?,
                                               print_all: FastlaneCore::Globals.verbose?)
