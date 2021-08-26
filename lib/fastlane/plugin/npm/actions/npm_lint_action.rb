@@ -7,7 +7,7 @@ module Fastlane
       def self.run(params)
         arguments = []
         arguments = ['--fix'] if params[:fix]
-        arguments.concat params[:fix]
+        arguments.concat params[:arguments]
 
         other_action.npm_run(
           script: 'lint', 

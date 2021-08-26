@@ -5,6 +5,8 @@ module Fastlane
   module Actions
     class NpmRunAction < Action
       def self.run(params)
+        UI.message(params[:step_name])
+        
         command = ['npm', 'run', params[:script]]
         command = ['npm', params[:script]] if ['install', 'test', 'start'].include? params[:script]
 
