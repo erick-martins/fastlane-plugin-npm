@@ -7,7 +7,8 @@ module Fastlane
       def self.run(params)
         other_action.npm_run(
           script: 'lint', 
-          step_name: params[:step_name]
+          step_name: params[:step_name],
+          arguments: params[:arguments]
         )
       end
 
@@ -36,8 +37,14 @@ module Fastlane
                                   optional: true,
                                       type: String),
 
+          FastlaneCore::ConfigItem.new(key: :arguments,
+                              default_value: [],
+                                description: "Script arguments",
+                                  optional: true,
+                                      type: Array),
+
           FastlaneCore::ConfigItem.new(key: :step_name,
-                             default_value: "Running lint script"
+                             default_value: "Running lint script",
                                description: "Name for this step",
                                   optional: true,
                                       type: String),

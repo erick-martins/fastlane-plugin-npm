@@ -5,12 +5,14 @@ module Fastlane
   module Actions
     class NpmRunAction < Action
       def self.run(params)
-        command = ['install', 'postinstall'].include? params[:script] ? ['npm', params[:script]] : ['npm', 'run', params[:script]]
+        command = ['npm', 'run', params[:script]]
+        command = ['npm', params[:script]] if ['install', 'test'].include? params[:script]
 
-        other_action.sh(
-          command: command, 
-          step_name: params[:step_name] ? params[:step_name] : "running npm script '#{params[:script]}'"
-        )
+        command.concat params[:arguments]
+
+        FastlaneCore::CommandExecutor.execute(command: command.join(' '),
+                                        print_command: FastlaneCore::Globals.verbose?,
+                                            print_all: true)
       end
 
       def self.description
@@ -35,9 +37,14 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :script,
                                description: "Script to run",
                                   optional: false,
-                                      type: String,
-                             default_value: nil),
-                             
+                                      type: String),
+          
+          FastlaneCore::ConfigItem.new(key: :arguments,
+                             default_value: [],
+                               description: "Script arguments",
+                                  optional: true,
+                                      type: Array),
+
           FastlaneCore::ConfigItem.new(key: :step_name,
                                description: "Name for this step",
                                   optional: true,

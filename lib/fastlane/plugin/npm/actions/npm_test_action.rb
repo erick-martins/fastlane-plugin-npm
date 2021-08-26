@@ -5,9 +5,15 @@ module Fastlane
   module Actions
     class NpmTestAction < Action
       def self.run(params)
+        arguments = []
+        arguments = ['--coverage'] if params[:coverage]
+        arguments.concat params[:arguments]
+
         other_action.npm_run(
-          script: 'lint', 
-          step_name: params[:step_name]
+          script: 'test', 
+          step_name: params[:step_name],
+          arguments: params[:arguments]
+
         )
       end
 
@@ -35,9 +41,21 @@ module Fastlane
                                description: "Test script",
                                   optional: true,
                                       type: String),
+          
+          FastlaneCore::ConfigItem.new(key: :arguments,
+                              default_value: [],
+                                description: "Script arguments",
+                                  optional: true,
+                                      type: Array),
+
+          FastlaneCore::ConfigItem.new(key: :coverage,
+                              default_value: false,
+                                description: "With coverage",
+                                  optional: true,
+                                      type: Boolean),
 
           FastlaneCore::ConfigItem.new(key: :step_name,
-                             default_value: "Running tests"
+                             default_value: "Running tests",
                                description: "Name for this step",
                                   optional: true,
                                       type: String),

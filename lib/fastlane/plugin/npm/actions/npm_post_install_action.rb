@@ -7,7 +7,8 @@ module Fastlane
       def self.run(params)
         other_action.npm_run(
           script: 'postinstall', 
-          step_name: params[:step_name]
+          step_name: params[:step_name],
+          arguments: params[:arguments]
         )
       end
 
@@ -31,10 +32,16 @@ module Fastlane
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(key: :step_name,
-                             default_value: "Running npm post install script"
+                             default_value: "Running npm post install script",
                                description: "Name for this step",
                                   optional: true,
                                       type: String),
+
+          FastlaneCore::ConfigItem.new(key: :arguments,
+                              default_value: [],
+                                description: "Script arguments",
+                                  optional: true,
+                                      type: Array),
         ]
       end
 

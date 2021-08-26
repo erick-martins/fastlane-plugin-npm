@@ -5,11 +5,15 @@ module Fastlane
   module Actions
     class NpmInstallAction < Action
       def self.run(params)
-        other_action.sh('rm -rf ../node_modules 2> /dev/null') if params[:clean]
-        
+        # rm may exit with non zero in the case where there is no node_modules and that's what we want anyway
+        FastlaneCore::CommandExecutor.execute(command: 'rm -rf ../node_modules 2> /dev/null',
+                                        print_command: FastlaneCore::Globals.verbose?,
+                                            print_all: FastlaneCore::Globals.verbose?)
+                                            
         other_action.npm_run(
           script: 'install', 
-          step_name: params[:step_name]
+          step_name: params[:step_name],
+          arguments: params[:arguments]
         )
 
         other_action.npm_post_install if params[:post_install_after]
@@ -35,22 +39,22 @@ module Fastlane
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(key: :step_name,
-                             default_value: "Installing dependencies"
+                             default_value: "Installing dependencies",
                                description: "Name for this step",
                                   optional: true,
                                       type: String),
-                                      
-          FastlaneCore::ConfigItem.new(key: :post_install_after,
-                             default_value: false,
-                               description: "Run postinstall script right after",
-                                  optional: true,
-                                      type: Boolean),
 
           FastlaneCore::ConfigItem.new(key: :clean,
                              default_value: false,
                                description: "Deletes node_modules folder",
                                   optional: true,
                                       type: Boolean),
+
+          FastlaneCore::ConfigItem.new(key: :arguments,
+                              default_value: [],
+                                description: "Script arguments",
+                                  optional: true,
+                                      type: Array),
 
           FastlaneCore::ConfigItem.new(key: :post_install_after,
                              default_value: false,
